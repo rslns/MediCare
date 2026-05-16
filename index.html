@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MediCare— AI Medical Report Simplifier</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+
+<div class="bg-mesh"></div>
+
+<div class="page-wrap">
+
+  <!-- LEFT SIDEBAR -->
+  <div class="left-panel">
+    <div>
+      <div class="brand">
+        <div class="brand-icon">🏥</div>
+        <div>
+          <div class="brand-name">MediCare</div>
+          <div class="brand-tag">For External use Only</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="upload-box" id="uploadBox">
+      <div class="upload-icon">📄</div>
+      <h3>Upload your report</h3>
+      <p>Blood tests · MRI · ECG<br>Discharge summaries</p>
+      <label for="fileInput" class="browse">Choose File</label>
+      <input type="file" id="fileInput" accept=".pdf,.png,.jpg,.jpeg" hidden/>
+      <p class="file-hint">PDF · PNG · JPG · Max 10MB</p>
+      <div class="file-ok hidden" id="fileOk">✓ File ready</div>
+    </div>
+
+    <div class="ctrl-group">
+      <div class="ctrl">
+        <div class="ctrl-lbl">Output Language</div>
+        <select id="langSelect">
+          <option value="english">English</option>
+          <option value="hindi">हिंदी (Hindi)</option>
+          <option value="telugu">తెలుగు (Telugu)</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <div class="ctrl-lbl">Report Type</div>
+        <select id="typeSelect">
+          <option value="auto">Auto Detect</option>
+          <option value="blood">Blood Test</option>
+          <option value="mri">MRI / Scan</option>
+          <option value="discharge">Discharge Summary</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="abtn" id="analyzeBtn" disabled>Analyze My Report</button>
+
+    <div class="left-footer">
+      <p>⚠ This tool is for informational purposes only. Always consult a qualified doctor before making health decisions.</p>
+    </div>
+  </div>
+
+  <!-- RIGHT CONTENT -->
+  <div class="right-panel">
+
+    <!-- Hero — shown before results -->
+    <div class="hero-section" id="heroSection">
+      <div class="hero-pill"><span class="live-dot"></span> Live AI Analysis</div>
+      <h1><span class="w1">Understand Your<br></span><span class="w2">Medical Reports</span></h1>
+      <p>Upload any blood test, MRI, or health report on the left. Get instant plain-language explanations, food advice, and personalized health tips powered by AI.</p>
+
+      <div class="feature-row">
+        <div class="feature-card">
+          <span class="fc-icon">🔬</span>
+          <div class="fc-title">Parameter Analysis</div>
+          <div class="fc-desc">Every value explained in plain English with HIGH / LOW / NORMAL flags</div>
+        </div>
+        <div class="feature-card">
+          <span class="fc-icon">🥗</span>
+          <div class="fc-title">Food & Lifestyle</div>
+          <div class="fc-desc">Personalized diet tips, habits, and supplements based on your results</div>
+        </div>
+        <div class="feature-card">
+          <span class="fc-icon">🌐</span>
+          <div class="fc-title">Multilingual</div>
+          <div class="fc-desc">Get your report explained in English, Hindi, or Telugu</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loader -->
+    <div class="loader hidden" id="loader">
+      <div class="spinner"></div>
+      <p>Analyzing your report with AI...</p>
+    </div>
+
+    <!-- Results -->
+    <div class="results hidden" id="results">
+
+      <div class="result-banner">
+        <div>
+          <div class="rtype-pill" id="reportTag"></div>
+          <h2 id="patientName"></h2>
+          <p id="patientInfo"></p>
+        </div>
+        <button class="expbtn" id="exportBtn">⬇ Export PDF</button>
+      </div>
+
+      <div class="stats-row" id="statsRow"></div>
+
+      <div class="section-card">
+        <div class="s-lbl"><span class="s-lbl-bar bar-purple"></span>Summary</div>
+        <p id="summary"></p>
+      </div>
+
+      <div class="section-card" style="margin-bottom:16px">
+        <div class="s-lbl"><span class="s-lbl-bar bar-blue"></span>Parameters</div>
+        <div class="params-grid" id="parameters"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="s-lbl"><span class="s-lbl-bar bar-blue"></span>Recommended Follow-up</div>
+        <p id="followUp"></p>
+      </div>
+
+      <div class="section-card" style="padding:0;overflow:hidden">
+        <div style="padding:20px 28px 0">
+          <div class="s-lbl"><span class="s-lbl-bar bar-green"></span>Health & Lifestyle Guide</div>
+        </div>
+        <div class="tabs-wrap" style="border:none;border-radius:0;margin:0">
+          <div class="tabs-header">
+            <button class="tab-btn active" onclick="switchTab('eat')"><span class="ti">🥗</span>Eat More</button>
+            <button class="tab-btn" onclick="switchTab('avoid')"><span class="ti">🚫</span>Avoid</button>
+            <button class="tab-btn" onclick="switchTab('habits')"><span class="ti">🏃</span>Habits</button>
+            <button class="tab-btn" onclick="switchTab('doctor')"><span class="ti">💊</span>Ask Doctor</button>
+          </div>
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-eat"></div>
+            <div class="tab-pane" id="tab-avoid"></div>
+            <div class="tab-pane" id="tab-habits"></div>
+            <div class="tab-pane" id="tab-doctor"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="disc" id="disclaimer" style="margin-top:16px"></div>
+
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
