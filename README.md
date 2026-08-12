@@ -1,4 +1,4 @@
-10:42 AMClaude responded: MedSimplify — AI Medical Report SimplifierMedSimplify — AI Medical Report Simplifier
+AI Medical Report Simplifier
 MedSimplify is a browser-based AI tool that helps patients understand their medical reports in plain, everyday language. Upload any blood test, MRI, ECG, or discharge summary and get an instant breakdown — no medical background required.
 What It Does
 
