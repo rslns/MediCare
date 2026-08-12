@@ -8,7 +8,7 @@
 
 > An AI-powered medical report explainer designed to make complex medical information easier to understand.
 
-🔗 **Live Demo:** https://y-two-steel-75.vercel.app/
+🔗 Live Demo: https://y-two-steel-75.vercel.app/
 
 ---
 
