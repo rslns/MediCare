@@ -66,7 +66,7 @@ PDF / Image Input
 Report Content Analysis
       │
       ▼
-Claude AI
+Groq AI
       │
       ├── Identify relevant information
       ├── Interpret report content
